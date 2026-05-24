@@ -9,7 +9,8 @@ DATASET_CONFIG      = "pqa_unlabeled"      # unlabeled subset (~200k samples)
 MAX_SAMPLES         = 50000                # start with 50k, scale up later
 RAW_DATA_PATH       = "data/raw/pubmed.json"
 PROCESSED_DATA_PATH = "data/processed/pubmed_chunks.json"
-
+EMBEDDINGS_PATH    = "data/processed/embeddings.npy"     # the vectors
+CHUNK_IDS_PATH     = "data/processed/chunk_ids.json"     # the mapping
 # ── Chunking ──────────────────────────────────────────────────────────────────
 CHUNK_SIZE          = 512                  # tokens per chunk
 CHUNK_OVERLAP       = 50                   # overlap between chunks
