@@ -1,13 +1,15 @@
 import os
-
 from sentence_transformers import SentenceTransformer
 import numpy as np
 import json
+import sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from config import BATCH_SIZE, CHUNK_IDS_PATH, EMBEDDING_MODEL, EMBEDDINGS_PATH, PROCESSED_DATA_PATH
 
 def load_model():
     """Load PubMedBERT sentence transformer model from config"""
+    print(f"Loading embedding model '{EMBEDDING_MODEL}'...")
     model = SentenceTransformer(EMBEDDING_MODEL)
     return model
 

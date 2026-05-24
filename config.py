@@ -16,7 +16,7 @@ CHUNK_SIZE          = 512                  # tokens per chunk
 CHUNK_OVERLAP       = 50                   # overlap between chunks
 
 # ── Embedding ─────────────────────────────────────────────────────────────────
-EMBEDDING_MODEL     = "NLP4Science/pubmedbert-base-embeddings"  # domain-tuned
+EMBEDDING_MODEL     = "neuml/pubmedbert-base-embeddings"  # domain-tuned
 EMBEDDING_DIM       = 768
 BATCH_SIZE          = 64
 
