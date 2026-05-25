@@ -3,7 +3,9 @@ from qdrant_client.models import VectorParams, Distance
 import numpy as np
 import json
 import os
-from config import CHUNK_IDS_PATH, COLLECTION_NAME, EMBEDDING_DIM, EMBEDDINGS_PATH, PROCESSED_DATA_PATH, QDRANT_HOST, QDRANT_PORT
+
+from tqdm import tqdm
+from config import BATCH_SIZE, CHUNK_IDS_PATH, COLLECTION_NAME, EMBEDDING_DIM, EMBEDDINGS_PATH, PROCESSED_DATA_PATH, QDRANT_HOST, QDRANT_PORT
 
 
 
@@ -37,7 +39,35 @@ def load_data():
         chunks = json.load(f)
     return embeddings, chunk_ids, chunks
     
-
 def ingest_embeddings(client, embeddings, chunks, chunk_ids):
     """Push vectors + payload to Qdrant in batches"""
-    pass
+    for i in tqdm(range(0, len(chunks), BATCH_SIZE), desc="Ingesting to Qdrant"):
+        batch_embeddings = embeddings[i:i+BATCH_SIZE]
+        batch_chunks = chunks[i:i+BATCH_SIZE]
+        batch_ids = chunk_ids[i:i+BATCH_SIZE]
+
+        points = []
+        for emb, chunk, cid in zip(batch_embeddings, batch_chunks, batch_ids):
+            point = QdrantClient.models.PointStruct(
+                id=int(cid),
+                vector=emb.tolist(),
+                payload={
+                    "text": chunk["text"],
+                    "source_id": chunk["source_id"],
+                    "question": chunk["question"]
+                }
+            )
+            points.append(point)
+
+        client.upsert(
+            collection_name=COLLECTION_NAME,
+            points=points
+        )
+
+
+if __name__ == "__main__":
+    client = get_qdrant_client()
+    create_collection(client)
+    embeddings, chunk_ids, chunks = load_data()
+    ingest_embeddings(client, embeddings, chunks, chunk_ids)
+    print("\nIngestion complete!")
