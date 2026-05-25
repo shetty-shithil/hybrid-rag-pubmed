@@ -1,5 +1,5 @@
 from qdrant_client import QdrantClient
-from qdrant_client.models import VectorParams, Distance
+from qdrant_client.models import VectorParams, Distance, PointStruct
 import numpy as np
 import json
 import os
@@ -16,17 +16,17 @@ def get_qdrant_client():
 
 def create_collection(client):
     """Create Qdrant collection with vector config (size=768, cosine distance)"""
-    existing_collections = client.get_collections().collections
+    existing_collections = [c.name for c in client.get_collections().collections]
     if COLLECTION_NAME in existing_collections:
         print(f"Collection '{COLLECTION_NAME}' already exists, skipping creation.")
         return
     else:
         client.create_collection(
             collection_name=COLLECTION_NAME,
-            vectors_config={
-                "size": EMBEDDING_DIM,
-                "distance": Distance.COSINE
-            }
+            vectors_config=VectorParams(
+                size=EMBEDDING_DIM,
+                distance=Distance.COSINE
+            )
         )
         print(f"Collection '{COLLECTION_NAME}' created successfully.")
 
