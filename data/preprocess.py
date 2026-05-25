@@ -17,7 +17,7 @@ def clean_text(text: str) -> str:
 def chunk_text(text: str, chunk_size: int = CHUNK_SIZE, overlap: int = CHUNK_OVERLAP) -> list[str]:
     """
     Simple word-level chunking with overlap.
-    In production you'd use a tokenizer-aware splitter — good talking point for AMA!
+    In production you'd use a tokenizer-aware splitter
     """
     words  = text.split()
     chunks = []
