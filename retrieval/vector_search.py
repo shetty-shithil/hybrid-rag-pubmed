@@ -32,6 +32,7 @@ if __name__ == "__main__":
     model  = load_model()
     client = get_qdrant_client()
     results = vector_search("does aspirin reduce cardiovascular risk", model, client)
+    #Cosine similarity scores between 0 and 1 are returned by Qdrant in the "score" field of each result. Higher score means more relevant. The text and source_id are stored in the payload.
     print(results)
     for r in results:
         print(f"\nScore : {r.score:.4f}")
