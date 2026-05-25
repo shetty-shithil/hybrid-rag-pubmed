@@ -3,7 +3,8 @@ from qdrant_client.models import VectorParams, Distance, PointStruct
 import numpy as np
 import json
 import os
-
+import sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from tqdm import tqdm
 from config import BATCH_SIZE, CHUNK_IDS_PATH, COLLECTION_NAME, EMBEDDING_DIM, EMBEDDINGS_PATH, PROCESSED_DATA_PATH, QDRANT_HOST, QDRANT_PORT
 
@@ -48,7 +49,7 @@ def ingest_embeddings(client, embeddings, chunks, chunk_ids):
 
         points = []
         for emb, chunk, cid in zip(batch_embeddings, batch_chunks, batch_ids):
-            point = QdrantClient.models.PointStruct(
+            point = PointStruct(
                 id=int(cid),
                 vector=emb.tolist(),
                 payload={
